@@ -49,7 +49,9 @@
   .mode-toggle { color: var(--halt); }
   .mode-toggle svg { display: block; transition: transform 180ms ease; }
   html.light .mode-toggle svg { transform: rotate(180deg); }
-  html.light .docs-tri path { stroke: #141E37; stroke-width: 2.5; }
+  html.light .mode-toggle { background: var(--surface); border-color: var(--slate); }
+  .site-menu .docs-tri path { fill: var(--halt); }
+  .site-menu .docs-tri text { fill: var(--ink); }
   *, *::before, *::after { box-sizing: border-box; }
   html, body {
     margin: 0; padding: 0;
@@ -77,18 +79,20 @@
   .site-menu .changelog-pill {
     font-family: var(--mono); font-size: 10px; font-weight: 500;
     letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--bone); text-decoration: none;
-    border: 1px solid var(--slate); border-radius: 999px; padding: 7px 16px;
+    color: var(--ink); background: var(--halt); text-decoration: none;
+    border: 1px solid var(--halt); border-radius: 999px; padding: 7px 16px;
   }
   .site-menu .tri-row { display: flex; align-items: center; justify-content: center; gap: 12px; }
   .site-menu .tri-link { display: block; width: 44px; height: 40px; transition: transform 180ms ease; }
   .site-menu .tri-link svg { display: block; width: 100%; height: 100%; }
-  .site-menu .tri-link .tri-body { fill: var(--surface); stroke: var(--border); transition: fill 180ms ease, stroke 180ms ease; }
-  .site-menu .tri-link .tri-icon { fill: var(--bone); transition: fill 180ms ease; }
+  .site-menu .tri-link .tri-body { fill: var(--halt); stroke: var(--halt); transition: fill 180ms ease, stroke 180ms ease; }
+  .site-menu .tri-link .tri-icon { fill: var(--ink); transition: fill 180ms ease; }
   .site-menu .tri-link:hover { transform: translateY(-2px); }
-  .site-menu .tri-link:hover .tri-body { fill: var(--halt); stroke: var(--halt); }
+  .site-menu .tri-link:hover .tri-body { fill: var(--bone); stroke: var(--bone); }
   .site-menu .tri-link:hover .tri-icon { fill: var(--ink); }
-  .site-menu .changelog-pill:hover { color: var(--halt); }
+  html.light .site-menu .tri-link:hover .tri-body { fill: #44517A; stroke: #44517A; }
+  .site-menu .changelog-pill:hover { transform: translateY(-2px); }
+  html.light .site-menu .changelog-pill:hover { background: #44517A; border-color: #44517A; }
   .site-menu a:focus-visible { outline: 2px solid var(--halt); outline-offset: 3px; }
   main { padding: 0 var(--gutter); width: 100%; max-width: 64rem; }
   .hero { padding-top: clamp(9rem, 24vh, 13.5rem); }
