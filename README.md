@@ -61,4 +61,4 @@ npm run lint    # tsc --noEmit
 
 ## License
 
-[MIT](./LICENSE)
+[BUSL-1.1](./LICENSE) — free for personal and noncommercial use; converts to MIT on 2030-10-16. Commercial use requires a written license from the Licensor.

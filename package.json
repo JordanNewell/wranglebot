@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Agent supervisor: deterministic guardrails, loop-breaking, and .curt emission for coding agents (Claude Code, Codex).",
   "type": "module",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "BUSL-1.1",
   "bin": { "wranglebot": "./bin/wranglebot.mjs" },
   "engines": { "node": ">=20" },
   "scripts": {
