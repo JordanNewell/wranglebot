@@ -264,7 +264,7 @@ npm run lint    <span class="tok"># tsc --noEmit</span></code></pre>
   <footer>
     <div class="foot-icons">
       <a href="https://jordannewell.com" aria-label="NEWELL">
-        <img class="newell-logo" src="n-logo.png" alt="NEWELL" />
+        <img class="newell-logo" src="n-logo.png" data-dark="n-logo.png" data-light="brand/n-logo-on-amber.png" alt="NEWELL" />
       </a>
     </div>
   </footer>
@@ -280,9 +280,11 @@ npm run lint    <span class="tok"># tsc --noEmit</span></code></pre>
       root.classList.toggle('light', light);
       var m = document.querySelector('meta[name="theme-color"]');
       if (m) m.setAttribute('content', light ? '#F8A808' : '#0E1116');
-      var mk = document.querySelector('.corner-logo img');
-      if (mk && mk.getAttribute('data-light')) {
-        mk.setAttribute('src', light ? mk.getAttribute('data-light') : mk.getAttribute('data-dark'));
+      var marks = document.querySelectorAll('img[data-dark]');
+      for (var i = 0; i < marks.length; i++) {
+        if (marks[i].getAttribute('data-light')) {
+          marks[i].setAttribute('src', light ? marks[i].getAttribute('data-light') : marks[i].getAttribute('data-dark'));
+        }
       }
       btn.innerHTML = '<svg viewBox="0 0 14 12" width="14" height="12" aria-hidden="true"><path d="M7 1 L13 11 L1 11 Z" fill="currentColor"/></svg>';
       try { localStorage.setItem('wb-mode', mode); } catch (e) {}
