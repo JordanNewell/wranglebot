@@ -47,14 +47,12 @@
   }
   .mode-toggle {
     position: absolute;
-    /* vertical center of the WrangleBot wordmark line: hero pad-top + half font-size - half pill */
-    top: calc(clamp(9rem, 24vh, 13.5rem) + clamp(2rem, 5vw, 3.75rem) - 14px);
+    top: 40px;
     left: clamp(1.5rem, 3.2vw, 3.5rem);
     font-family: var(--mono); font-size: 10px; font-weight: 500;
     letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--slate); background: var(--ink);
+    color: var(--slate); background: none;
     border: 1px solid var(--border); border-radius: 999px;
-    z-index: 10;
     padding: 7px 14px; cursor: pointer;
     transition: color 180ms ease, border-color 180ms ease;
   }
@@ -379,7 +377,7 @@
     .pillar .num { margin-bottom: -20px; }
     .pillar + .pillar-col { padding-top: 0; }
     .newell-logo { height: 24px; }
-    .mode-toggle { top: calc(9rem + 4rem - 14px); } .site-menu { top: 96px; gap: 12px; width: 56px; }
+    .mode-toggle { top: 1.5rem; } .site-menu { top: 96px; gap: 12px; width: 56px; }
     .site-menu .docs-tri { width: 52px; height: 36px; }
     .site-menu .tri-link { width: 28px; height: 26px; }
     .site-menu .changelog-pill { font-size: 9px; padding: 6px 12px; }
