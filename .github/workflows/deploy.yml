@@ -47,7 +47,7 @@ jobs:
             base="https://${{ github.ref_name }}.wranglebot.pages.dev"
           fi
           for path in / /docs.html /changelog.html /license.html; do
-            code=$(curl -s -o /dev/null -w '%{http_code}' "${base}${path}")
+            code=$(curl -sL -o /dev/null -w '%{http_code}' "${base}${path}")
             echo "${path} -> ${code}"
             [ "$code" = "200" ] || { echo "FAIL: ${path} not 200"; exit 1; }
           done
