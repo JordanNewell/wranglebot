@@ -4,8 +4,12 @@
   "description": "Agent supervisor: deterministic guardrails, loop-breaking, and .curt emission for coding agents (Claude Code, Codex).",
   "type": "module",
   "license": "BUSL-1.1",
-  "bin": { "wranglebot": "./bin/wranglebot.mjs" },
-  "engines": { "node": ">=20" },
+  "bin": {
+    "wranglebot": "bin/wranglebot.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
@@ -15,12 +19,18 @@
     "curt-format": "^1.2.0",
     "tree-sitter": "^0.22.4",
     "tree-sitter-python": "^0.23.4",
-    "tree-sitter-typescript": "^0.23.2"
+    "tree-sitter-typescript": "^0.23.2",
+    "tsx": "^4.19.2"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
-    "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "vitest": "^3.0.0"
-  }
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "README.md",
+    "LICENSE"
+  ]
 }
