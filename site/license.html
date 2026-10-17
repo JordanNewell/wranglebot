@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="dark" />
+<meta name="theme-color" content="#0E1116" />
+<meta name="robots" content="index, follow" />
+<meta name="description" content="WrangleBot licensing — free &amp; open source. Interim license statement." />
+<meta property="og:title" content="WrangleBot — License" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://wranglebot.com/license.html" />
+<meta property="og:image" content="/og.png" />
+<title>WrangleBot — License</title>
+<link rel="icon" type="image/png" href="favicon.png" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0E1116;
+    --surface: #151A21;
+    --border: #232A33;
+    --bone: #ECEFF4;
+    --slate: #8B95A5;
+    --halt: #FFB224;
+    --display: 'Space Grotesk', 'Segoe UI', sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    --gutter: clamp(1.5rem, 5vw, 4rem);
+  }
+    html.light {
+    --ink: #F8A808;
+    --surface: #FCC24E;
+    --border: #D08E08;
+    --bone: #141E37;
+    --slate: #44517A;
+    --halt: #141E37;
+    --numeral: #C98A10;
+  }
+  .mode-toggle {
+    position: absolute;
+    top: 40px;
+    left: clamp(1.5rem, 3.2vw, 3.5rem);
+    font-family: var(--mono); font-size: 10px; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--slate); background: none;
+    border: 1px solid var(--border); border-radius: 999px;
+    padding: 7px 14px; cursor: pointer;
+    transition: color 180ms ease, border-color 180ms ease;
+  }
+  .mode-toggle:hover { color: var(--halt); border-color: var(--halt); }
+  .mode-toggle { color: var(--halt); }
+  .mode-toggle svg { display: block; transition: transform 180ms ease; }
+  html.light .mode-toggle svg { transform: rotate(180deg); }
+  html.light .docs-tri path { stroke: #141E37; stroke-width: 2.5; }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--ink); color: var(--bone);
+    font-family: var(--mono); font-size: 14px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+  }
+  .wrap { min-height: 100svh; display: flex; flex-direction: column; }
+  .corner-logo {
+    position: absolute;
+    top: 40px;
+    right: clamp(1.5rem, 3.2vw, 3.5rem);
+    width: 120px; height: 120px;
+  }
+  .corner-logo img { display: block; width: 100%; height: 100%; }
+  .site-menu {
+    position: absolute;
+    top: 176px;
+    right: clamp(1.5rem, 3.2vw, 3.5rem);
+    width: 120px;
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+  }
+  .site-menu .docs-tri { display: block; width: 64px; height: 44px; transition: transform 180ms ease; }
+  .site-menu .docs-tri:hover { transform: translateY(-2px); }
+  .site-menu .changelog-pill {
+    font-family: var(--mono); font-size: 10px; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--bone); text-decoration: none;
+    border: 1px solid var(--slate); border-radius: 999px; padding: 7px 16px;
+  }
+  .site-menu .tri-row { display: flex; align-items: center; justify-content: center; gap: 12px; }
+  .site-menu .tri-link { display: block; width: 44px; height: 40px; transition: transform 180ms ease; }
+  .site-menu .tri-link svg { display: block; width: 100%; height: 100%; }
+  .site-menu .tri-link .tri-body { fill: var(--surface); stroke: var(--border); transition: fill 180ms ease, stroke 180ms ease; }
+  .site-menu .tri-link .tri-icon { fill: var(--bone); transition: fill 180ms ease; }
+  .site-menu .tri-link:hover { transform: translateY(-2px); }
+  .site-menu .tri-link:hover .tri-body { fill: var(--halt); stroke: var(--halt); }
+  .site-menu .tri-link:hover .tri-icon { fill: var(--ink); }
+  .site-menu .changelog-pill:hover { color: var(--halt); }
+  .site-menu a:focus-visible { outline: 2px solid var(--halt); outline-offset: 3px; }
+  main { padding: 0 var(--gutter); width: 100%; max-width: 64rem; }
+  .hero { padding-top: clamp(9rem, 24vh, 13.5rem); }
+  h1 {
+    margin: 0 0 20px;
+    font-family: var(--display); font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 700; letter-spacing: -0.03em; line-height: 1; color: var(--bone);
+  }
+  .sub {
+    margin: 0 0 48px; font-size: 12px; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--halt);
+  }
+  .entry { margin: 0 0 48px; }
+  .entry .ver {
+    display: inline-block;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.1em;
+    color: var(--halt); border: 1px solid var(--halt); border-radius: 4px;
+    padding: 4px 10px; margin: 0 0 12px;
+  }
+  .entry .date { color: var(--slate); font-size: 12px; margin: 0 0 8px; }
+  .entry ul { margin: 0; padding-left: 20px; color: var(--slate); }
+  .entry ul b { color: var(--bone); font-weight: 500; }
+  code {
+    font-family: var(--mono); font-size: 13px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 6px; color: var(--bone);
+  }
+  .home-link {
+    position: fixed; bottom: 24px; right: 24px;
+    font-family: var(--mono); font-size: 11px; font-weight: 500;
+    letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--slate); text-decoration: none;
+    transition: color 180ms ease;
+  }
+  .home-link:hover { color: var(--halt); }
+  footer { margin-top: auto; padding: 96px 0 32px; }
+  .foot-icons { display: flex; justify-content: center; }
+  .newell-logo { height: 28px; width: auto; opacity: 0.9; }
+  @media (max-width: 640px) {
+    .corner-logo { top: 1.5rem; width: 56px; height: 56px; }
+    .mode-toggle { top: 1.5rem; } .site-menu { top: 96px; gap: 12px; width: 56px; }
+    .site-menu .docs-tri { width: 52px; height: 36px; }
+    .site-menu .tri-link { width: 28px; height: 26px; }
+    .site-menu .changelog-pill { font-size: 9px; padding: 6px 12px; } .site-menu .tri-row { gap: 6px; } .hero { padding-top: 9rem; }
+    .newell-logo { height: 24px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <button id="mode-toggle" class="mode-toggle" type="button" aria-label="Toggle day/night mode">Day</button>
+
+  <a class="corner-logo" href="/" aria-label="WrangleBot">
+    <img src="brand/wranglebot-mark-on-dark.svg" data-dark="brand/wranglebot-mark-on-dark.svg" data-light="brand/wranglebot-mark-on-light.svg" alt="WrangleBot mark" />
+  </a>
+
+  <nav class="site-menu" aria-label="Site">
+    <a class="docs-tri" href="/docs.html" aria-label="Docs" title="Docs">
+      <svg viewBox="0 0 64 44" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M32 2 L62 42 L2 42 Z" fill="#FFB224"/>
+        <text x="32" y="38" text-anchor="middle" font-family="JetBrains Mono, monospace" font-weight="700" font-size="13" letter-spacing="1" fill="#0E1116">DOC</text>
+      </svg>
+    </a>
+    <a class="changelog-pill" href="/changelog.html" title="Changelog">Changelog</a>
+    <div class="tri-row">
+      <a class="tri-link" href="https://x.com/WrangleBot" rel="me" aria-label="X (Twitter)" title="X">
+        <svg viewBox="0 0 32 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path class="tri-body" d="M16 1.5 L30.5 26.5 L1.5 26.5 Z" stroke-width="1.5" stroke-linejoin="round"/>
+          <g transform="translate(11.4,14.2) scale(0.38)"><path class="tri-icon" d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></g>
+        </svg>
+      </a>
+      <a class="tri-link" href="/license.html" aria-label="License" title="License">
+        <svg viewBox="0 0 32 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path class="tri-body" d="M16 1.5 L30.5 26.5 L1.5 26.5 Z" stroke-width="1.5" stroke-linejoin="round"/>
+          <text class="tri-icon" x="16" y="24" text-anchor="middle" font-family="JetBrains Mono, monospace" font-weight="700" font-size="12">©</text>
+        </svg>
+      </a>
+      <a class="tri-link" href="https://github.com/JordanNewell/wranglebot" aria-label="GitHub" title="GitHub">
+        <svg viewBox="0 0 32 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path class="tri-body" d="M16 1.5 L30.5 26.5 L1.5 26.5 Z" stroke-width="1.5" stroke-linejoin="round"/>
+          <g transform="translate(10.6,14.6) scale(0.68)"><path class="tri-icon" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></g>
+        </svg>
+      </a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <h1>License</h1>
+      <p class="sub">BUSL-1.1 · MIT conversion 2030-10-16</p>
+    </section>
+
+    <div class="entry">
+      <span class="ver">BUSL-1.1</span>
+      <p class="date">2026-10-16 · <a href="https://github.com/JordanNewell/wranglebot/blob/main/LICENSE">full text</a></p>
+      <ul>
+        <li><b>WrangleBot is source-available</b> under the Business Source License 1.1.</li>
+        <li><b>Licensor:</b> Jordan Newell. <b>Licensed Work:</b> github.com/JordanNewell/wranglebot.</li>
+        <li><b>Free for personal and noncommercial use</b> — including production use.</li>
+        <li><b>Commercial use requires a written license</b> from the Licensor.</li>
+        <li><b>Change Date: 2030-10-16</b> — the work converts to <b>MIT</b> at that date, with all permissive rights.</li>
+        <li>The <b>.curt</b> session format is an open standard — <a href="https://curtisai.tech/curt" style="color:var(--halt);text-decoration:none;border-bottom:1px solid var(--border);">curtisai.tech/curt</a></li>
+      </ul>
+    </div>
+  </main>
+
+  <footer>
+    <div class="foot-icons">
+      <a href="https://jordannewell.com" aria-label="NEWELL">
+        <img class="newell-logo" src="n-logo.png" alt="NEWELL" />
+      </a>
+    </div>
+  </footer>
+
+</div>
+<a class="home-link" href="/">Home</a>
+<script>
+  (function () {
+    var btn = document.getElementById('mode-toggle');
+    var root = document.documentElement;
+    function apply(mode) {
+      var light = mode === 'light';
+      root.classList.toggle('light', light);
+      var m = document.querySelector('meta[name="theme-color"]');
+      if (m) m.setAttribute('content', light ? '#F8A808' : '#0E1116');
+      var mk = document.querySelector('.corner-logo img');
+      if (mk && mk.getAttribute('data-light')) {
+        mk.setAttribute('src', light ? mk.getAttribute('data-light') : mk.getAttribute('data-dark'));
+      }
+      btn.innerHTML = '<svg viewBox="0 0 14 12" width="14" height="12" aria-hidden="true"><path d="M7 1 L13 11 L1 11 Z" fill="currentColor"/></svg>';
+      try { localStorage.setItem('wb-mode', mode); } catch (e) {}
+    }
+    var saved = 'dark';
+    try { saved = localStorage.getItem('wb-mode') || 'dark'; } catch (e) {}
+    apply(saved);
+    btn.addEventListener('click', function () {
+      apply(root.classList.contains('light') ? 'dark' : 'light');
+    });
+  })();
+</script>
+</body>
+</html>

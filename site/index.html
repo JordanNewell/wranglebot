@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="dark" />
+<meta name="theme-color" content="#0E1116" />
+<meta name="robots" content="index, follow" />
+<meta name="description" content="A local supervisor daemon for autonomous coding agents. Loop breaking, AST diff guardrails, .curt session emission. Source-available (BUSL-1.1)." />
+<meta property="og:title" content="WrangleBot — Corralling rogue agents" />
+<meta property="og:description" content="A local supervisor daemon for autonomous coding agents. Loop breaking, AST diff guardrails, .curt session emission. Source-available (BUSL-1.1)." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://wranglebot.com/" />
+<meta property="og:image" content="/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="WrangleBot — Corralling rogue agents" />
+<meta name="twitter:description" content="A local supervisor daemon for autonomous coding agents. Loop breaking, AST diff guardrails, .curt session emission. Source-available (BUSL-1.1)." />
+<meta name="twitter:image" content="/og.png" />
+<title>WrangleBot — Corralling rogue agents</title>
+<link rel="icon" type="image/png" href="favicon.png" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0E1116;
+    --surface: #151A21;
+    --border: #232A33;
+    --bone: #ECEFF4;
+    --slate: #8B95A5;
+    --halt: #FFB224;
+    --numeral: #1B222B;
+    --display: 'Space Grotesk', 'Segoe UI', sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    --gutter: clamp(1.5rem, 5vw, 4rem);
+  }
+
+    html.light {
+    --ink: #F8A808;
+    --surface: #FCC24E;
+    --border: #D08E08;
+    --bone: #141E37;
+    --slate: #44517A;
+    --halt: #141E37;
+    --numeral: #C98A10;
+  }
+  .mode-toggle {
+    position: absolute;
+    top: 40px;
+    left: clamp(1.5rem, 3.2vw, 3.5rem);
+    font-family: var(--mono); font-size: 10px; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--slate); background: none;
+    border: 1px solid var(--border); border-radius: 999px;
+    padding: 7px 14px; cursor: pointer;
+    transition: color 180ms ease, border-color 180ms ease;
+  }
+  .mode-toggle:hover { color: var(--halt); border-color: var(--halt); }
+  .mode-toggle { color: var(--halt); }
+  .mode-toggle svg { display: block; transition: transform 180ms ease; }
+  html.light .mode-toggle svg { transform: rotate(180deg); }
+  html.light .docs-tri path { stroke: #141E37; stroke-width: 2.5; }
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--ink);
+    color: var(--bone);
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  .wrap {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* corner mark — canonical geometry */
+  .corner-logo {
+    position: absolute;
+    top: 40px;
+    right: clamp(1.5rem, 3.2vw, 3.5rem);
+    width: 120px;
+    height: 120px;
+  }
+  .corner-logo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* right-corner menu stack — chain centered under the corner mark */
+  .site-menu {
+    position: absolute;
+    top: 176px;
+    right: clamp(1.5rem, 3.2vw, 3.5rem);
+    width: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+  .site-menu .docs-tri {
+    display: block;
+    width: 64px;
+    height: 44px;
+    transition: transform 180ms ease;
+  }
+  .site-menu .docs-tri:hover { transform: translateY(-2px); }
+  .site-menu .changelog-pill {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--slate);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 7px 16px;
+    transition: color 180ms ease, border-color 180ms ease;
+  }
+  .site-menu .changelog-pill:hover { color: var(--bone); border-color: var(--slate); }
+  .site-menu .tri-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+  .site-menu .tri-link {
+    display: block;
+    width: 44px;
+    height: 40px;
+    transition: transform 180ms ease;
+  }
+  .site-menu .tri-link svg { display: block; width: 100%; height: 100%; }
+  .site-menu .tri-link .tri-body { fill: var(--surface); stroke: var(--border); transition: fill 180ms ease, stroke 180ms ease; }
+  .site-menu .tri-link .tri-icon { fill: var(--bone); transition: fill 180ms ease; }
+  .site-menu .tri-link:hover { transform: translateY(-2px); }
+  .site-menu .tri-link:hover .tri-body { fill: var(--halt); stroke: var(--halt); }
+  .site-menu .tri-link:hover .tri-icon { fill: var(--ink); }
+  .site-menu a:focus-visible { outline: 2px solid var(--halt); outline-offset: 3px; }
+
+  main {
+    padding: 0 var(--gutter);
+    width: 100%;
+    max-width: 64rem;
+  }
+
+  /* hero */
+  .hero {
+    padding-top: clamp(9rem, 24vh, 13.5rem);
+  }
+
+  .wordmark {
+    margin: 0 0 20px;
+    font-family: var(--display);
+    font-size: clamp(4rem, 10vw, 7.5rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: var(--bone);
+  }
+  .wordmark .bot { color: var(--halt); }
+
+  .tagline {
+    margin: 0 0 24px;
+    font-family: var(--mono);
+    font-size: clamp(0.8125rem, 1.6vw, 1rem);
+    font-weight: 500;
+    color: var(--halt);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .one-liner {
+    margin: 0 0 48px;
+    max-width: 52ch;
+    color: var(--slate);
+    font-size: clamp(0.875rem, 1.4vw, 1rem);
+  }
+
+  /* terminal — the centerpiece */
+  .terminal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 0 0 96px clamp(0rem, 12vw, 6rem);
+    overflow-x: auto;
+  }
+  .terminal-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .terminal-bar img {
+    width: 20px;
+    height: 20px;
+    display: block;
+  }
+  .terminal-bar span {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--slate);
+  }
+  .terminal-body {
+    padding: 24px;
+    font-size: clamp(0.75rem, 1.3vw, 0.875rem);
+    line-height: 1.9;
+  }
+  .terminal .prompt { color: var(--slate); font-weight: 500; }
+  .terminal .cmd { color: var(--bone); }
+  .terminal .sys { color: var(--slate); }
+  .terminal .sys b { color: var(--bone); font-weight: 500; }
+  .terminal .halt { color: var(--halt); font-weight: 500; }
+
+  /* pillars — asymmetric: 01 wide left, 02/03 stacked right */
+  .pillars {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 32px;
+    margin: 0 0 96px;
+  }
+  .pillar .num {
+    font-family: var(--display);
+    font-size: clamp(5rem, 10vw, 8rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: var(--numeral);
+    margin: 0 0 -28px;
+  }
+  .pillar h2 {
+    position: relative;
+    margin: 0 0 12px;
+    font-family: var(--display);
+    font-size: clamp(1rem, 1.8vw, 1.25rem);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--bone);
+  }
+  .pillar p {
+    margin: 0;
+    color: var(--slate);
+    font-size: clamp(0.8125rem, 1.2vw, 0.875rem);
+    max-width: 44ch;
+  }
+  .pillar + .pillar-col { padding-top: 48px; }
+  .pillar-col .pillar + .pillar { margin-top: 32px; }
+
+  /* status strip */
+  .status {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 96px;
+  }
+  .status .chip {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--slate);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 8px 14px;
+  }
+  .status .chip.alert {
+    color: var(--halt);
+    border-color: var(--halt);
+  }
+
+  /* install */
+  .install {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 0 0 32px;
+  }
+  .install .cmdline {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 16px 12px 24px;
+  }
+  .install code {
+    font-family: var(--mono);
+    font-size: clamp(0.8125rem, 1.4vw, 0.9375rem);
+    font-weight: 500;
+    color: var(--bone);
+  }
+  .install code .prompt { color: var(--slate); }
+  .install .copy {
+    display: inline-flex;
+    align-items: center;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--slate);
+    cursor: pointer;
+    transition: color 180ms ease, border-color 180ms ease;
+  }
+  .install .copy:hover { color: var(--bone); border-color: var(--slate); }
+  .install .copy:focus-visible { outline: 2px solid var(--halt); outline-offset: 2px; }
+  .install .chip {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--slate);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 8px 12px;
+  }
+
+  .ecosystem {
+    margin: 0;
+    color: var(--slate);
+    font-size: clamp(0.8125rem, 1.2vw, 0.875rem);
+  }
+  .ecosystem a {
+    color: var(--halt);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    transition: border-color 180ms ease;
+  }
+  .ecosystem a:hover { border-bottom-color: var(--halt); }
+
+  /* footer — house canon */
+  footer {
+    margin-top: auto;
+    padding-top: 96px;
+  }
+  .foot-icons {
+    display: flex;
+    justify-content: center;
+  }
+  .newell-logo {
+    height: 28px;
+    width: auto;
+    opacity: 0.9;
+  }
+  footer { padding-bottom: 32px; }
+
+  /* mobile */
+  @media (max-width: 640px) {
+    .corner-logo {
+      top: 1.5rem;
+      width: 56px;
+      height: 56px;
+    }
+    .terminal { margin-left: 0; }
+    .terminal-body { padding: 16px; white-space: pre-wrap; word-break: break-word; }
+    .pillars { grid-template-columns: 1fr; gap: 32px; }
+    .pillar .num { margin-bottom: -20px; }
+    .pillar + .pillar-col { padding-top: 0; }
+    .newell-logo { height: 24px; }
+    .mode-toggle { top: 1.5rem; } .site-menu { top: 96px; gap: 12px; width: 56px; }
+    .site-menu .docs-tri { width: 52px; height: 36px; }
+    .site-menu .tri-link { width: 28px; height: 26px; }
+    .site-menu .changelog-pill { font-size: 9px; padding: 6px 12px; }
+    .site-menu .tri-row { gap: 6px; }
+    .hero { padding-top: 9rem; } .wordmark .bot { display: block; }
+  }
+
+  /* reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <button id="mode-toggle" class="mode-toggle" type="button" aria-label="Toggle day/night mode">Day</button>
+
+  <a class="corner-logo" href="https://wranglebot.com" aria-label="WrangleBot">
+    <img src="brand/wranglebot-mark-on-dark.svg" data-dark="brand/wranglebot-mark-on-dark.svg" data-light="brand/wranglebot-mark-on-light.svg" alt="WrangleBot mark" />
+  </a>
+
+  <nav class="site-menu" aria-label="Site">
+    <a class="docs-tri" href="/docs.html" aria-label="Docs" title="Docs">
+      <svg viewBox="0 0 64 44" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M32 2 L62 42 L2 42 Z" fill="#FFB224"/>
+        <text x="32" y="38" text-anchor="middle" font-family="JetBrains Mono, monospace" font-weight="700" font-size="13" letter-spacing="1" fill="#0E1116">DOC</text>
+      </svg>
+    </a>
+    <a class="changelog-pill" href="/changelog.html" title="Changelog">Changelog</a>
+    <div class="tri-row">
+      <a class="tri-link" href="https://x.com/WrangleBot" rel="me" aria-label="X (Twitter)" title="X">
+        <svg viewBox="0 0 32 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path class="tri-body" d="M16 1.5 L30.5 26.5 L1.5 26.5 Z" stroke-width="1.5" stroke-linejoin="round"/>
+          <g transform="translate(11.4,14.2) scale(0.38)"><path class="tri-icon" d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></g>
+        </svg>
+      </a>
+      <a class="tri-link" href="/license.html" aria-label="License" title="License">
+        <svg viewBox="0 0 32 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path class="tri-body" d="M16 1.5 L30.5 26.5 L1.5 26.5 Z" stroke-width="1.5" stroke-linejoin="round"/>
+          <text class="tri-icon" x="16" y="24" text-anchor="middle" font-family="JetBrains Mono, monospace" font-weight="700" font-size="12">©</text>
+        </svg>
+      </a>
+      <a class="tri-link" href="https://github.com/JordanNewell/wranglebot" aria-label="GitHub" title="GitHub">
+        <svg viewBox="0 0 32 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path class="tri-body" d="M16 1.5 L30.5 26.5 L1.5 26.5 Z" stroke-width="1.5" stroke-linejoin="round"/>
+          <g transform="translate(10.6,14.6) scale(0.68)"><path class="tri-icon" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></g>
+        </svg>
+      </a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <h1 class="wordmark">Wrangle<span class="bot">Bot</span></h1>
+      <p class="tagline">Corralling rogue agents.</p>
+      <p class="one-liner">A local supervisor daemon for autonomous coding agents. Breaks loops, fences diffs, ships clean sessions.</p>
+    </section>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <img src="brand/wranglebot-mark-on-dark.svg" alt="" aria-hidden="true" />
+        <span>wranglebot — supervised session</span>
+      </div>
+      <pre class="terminal-body"><span class="prompt">$</span> <span class="cmd">wranglebot run claude-code --workdir . --scope src/auth --scope tests/auth</span>
+<span class="sys">[wranglebot] worktree locked · scope: <b>src/auth/**, tests/auth/**</b></span>
+<span class="sys">[wranglebot] loop detected — 5× identical test-fix cycle · <span class="halt">halting</span></span>
+<span class="sys">[wranglebot] out-of-scope edit blocked · <span class="halt">src/billing/invoice.ts</span></span>
+<span class="sys">[wranglebot] session emitted · <span class="halt">session.curt</span> (1,842 → 210 lines)</span></pre>
+    </div>
+
+    <div class="pillars">
+      <div class="pillar">
+        <div class="num">01</div>
+        <h2>LOOP BREAKER</h2>
+        <p>Deterministic kill-switch. Fingerprints repeated tool calls, watches diff-delta across turns, halts the thrash before your token budget dies.</p>
+      </div>
+      <div class="pillar-col">
+        <div class="pillar">
+          <div class="num">02</div>
+          <h2>AST GUARDRAILS</h2>
+          <p>tree-sitter validation on every edit before it lands. Illegal syntax and out-of-scope files never touch the worktree.</p>
+        </div>
+        <div class="pillar">
+          <div class="num">03</div>
+          <h2>.CURT SESSIONS</h2>
+          <p>Every supervised run emits a lean, portable <b>.curt</b> session. Audit-ready. First-class citizen of the Curtis ecosystem.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="status">
+      <span class="chip">v0.1 shipped · on npm</span>
+      <span class="chip">Claude Code + Codex adapters</span>
+      <span class="chip">Source-available · BUSL-1.1</span>
+    </div>
+
+    <div class="install">
+      <span class="cmdline"><code><span class="prompt">$</span> npm i -g @wranglebot/cli</code><button class="copy" type="button" data-copy="npm i -g @wranglebot/cli" aria-label="Copy install command">copy</button></span>
+      <span class="chip">v0.1.0 · live</span>
+    </div>
+
+    <p class="ecosystem">Every session is a .curt file. Part of the Curtis ecosystem → <a href="https://curtisai.tech">curtisai.tech</a></p>
+  </main>
+
+  <footer>
+    <div class="foot-icons">
+      <a href="https://jordannewell.com" aria-label="NEWELL">
+        <img class="newell-logo" src="n-logo.png" alt="NEWELL" />
+      </a>
+    </div>
+  </footer>
+
+</div>
+<script>
+  document.querySelectorAll('.copy[data-copy]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var t = btn.getAttribute('data-copy');
+      function done() { btn.textContent = 'copied'; setTimeout(function () { btn.textContent = 'copy'; }, 1600); }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(t).then(done, function () {});
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = t; document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); done(); } catch (e) {}
+        document.body.removeChild(ta);
+      }
+    });
+  });
+</script>
+<script>
+  (function () {
+    var btn = document.getElementById('mode-toggle');
+    var root = document.documentElement;
+    function apply(mode) {
+      var light = mode === 'light';
+      root.classList.toggle('light', light);
+      var m = document.querySelector('meta[name="theme-color"]');
+      if (m) m.setAttribute('content', light ? '#F8A808' : '#0E1116');
+      var mk = document.querySelector('.corner-logo img');
+      if (mk && mk.getAttribute('data-light')) {
+        mk.setAttribute('src', light ? mk.getAttribute('data-light') : mk.getAttribute('data-dark'));
+      }
+      btn.innerHTML = '<svg viewBox="0 0 14 12" width="14" height="12" aria-hidden="true"><path d="M7 1 L13 11 L1 11 Z" fill="currentColor"/></svg>';
+      try { localStorage.setItem('wb-mode', mode); } catch (e) {}
+    }
+    var saved = 'dark';
+    try { saved = localStorage.getItem('wb-mode') || 'dark'; } catch (e) {}
+    apply(saved);
+    btn.addEventListener('click', function () {
+      apply(root.classList.contains('light') ? 'dark' : 'light');
+    });
+  })();
+</script>
+</body>
+</html>
