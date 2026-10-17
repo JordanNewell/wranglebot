@@ -9,10 +9,8 @@ emission). Announces v0.1, in development.
 - `index.html` — the entire page: inline CSS, tiny inline copy-button JS, no
   build step. WrangleBot brand system (ink `#0E1116`, bone `#ECEFF4`, halt
   amber `#FFB224`), Space Grotesk display + JetBrains Mono, canonical
-  interleaf-pattern header geometry + footer N logo.
+  interleaf-pattern header geometry.
 - `brand/` — canonical WrangleBot SVGs (mark, lockups, app icon) + lockup PNG.
-- `n-logo.png` — white N mark (footer house canon).
-- `n-mark.svg` — legacy N mark (unused, kept for reference).
 - `favicon.png` — 512px app icon (rasterized from `brand/` SVG).
 - `apple-touch-icon.png` — 180px, same source.
 - `og.png` — 1200×630 Open Graph card.
