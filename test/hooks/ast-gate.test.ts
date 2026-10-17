@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import path from "node:path";
 import { AstGate } from "../../src/hooks/ast-gate.js";
 import type { AgentEvent } from "../../src/types.js";
 
@@ -93,11 +94,14 @@ describe("AstGate", () => {
   });
 
   it("warns on deletion outside the workdir", () => {
+    // Absolute on every platform, forward-slashed so it's a valid string
+    // literal in emitted code, and guaranteed outside process.cwd().
+    const outside = path.resolve(process.cwd(), "..", "astgate-outside-target").replaceAll("\\", "/");
     const v = gate.inspect(
       editEvent(
         writeInput(
           "src/clean.ts",
-          'import fs from "fs";\nfs.rmSync("C:/Windows/Temp", { recursive: true, force: true });\n',
+          `import fs from "fs";\nfs.rmSync("${outside}", { recursive: true, force: true });\n`,
         ),
       ),
     );
