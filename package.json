@@ -1,6 +1,6 @@
 {
   "name": "@wranglebot/cli",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Agent supervisor: deterministic guardrails, loop-breaking, and .curt emission for coding agents (Claude Code, Codex).",
   "type": "module",
   "license": "BUSL-1.1",
