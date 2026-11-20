@@ -32,7 +32,13 @@ jobs:
 
       - name: Deploy to Cloudflare Pages
         if: env.HAS_CF_TOKEN == 'true'
-        run: npx wrangler pages deploy site --project-name=wranglebot --branch="${{ github.ref_name }}"
+        id: deploy
+        run: |
+          npx wrangler pages deploy site --project-name=wranglebot --branch="${{ github.ref_name }}" 2>&1 | tee /tmp/deploy.log
+          # CF truncates long branch aliases (e.g. feat-readme-brand-and-site-h) —
+          # never reconstruct the alias from the branch name; take it from wrangler.
+          alias_url=$(grep -oE 'Deployment alias URL: https://[^[:space:]]+' /tmp/deploy.log | awk '{print $NF}')
+          echo "alias_url=${alias_url:-none}" >> "$GITHUB_OUTPUT"
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: 554619f8c7d3a4010cb161df3037269d
@@ -42,12 +48,16 @@ jobs:
         run: |
           sleep 20
           branch="${{ github.ref_name }}"
-          safe_branch="${branch//\//-}"
           if [ "$branch" = "main" ]; then
             base="https://wranglebot.com"
           else
-            base="https://${safe_branch}.wranglebot.pages.dev"
+            base="${{ steps.deploy.outputs.alias_url }}"
+            if [ -z "$base" ] || [ "$base" = "none" ]; then
+              echo "::warning::No alias URL captured from wrangler output — skipping preview smoke"
+              exit 0
+            fi
           fi
+          echo "smoke base: ${base}"
           for path in / /docs.html /changelog.html /license.html; do
             code=$(curl -sL -o /dev/null -w '%{http_code}' "${base}${path}")
             echo "${path} -> ${code}"
