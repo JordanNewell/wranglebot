@@ -1,8 +1,8 @@
-# wranglebot-holding
+# wranglebot-site
 
-Product site for **wranglebot.com** — WrangleBot, a local supervisor daemon for
-autonomous coding agents (loop breaking, AST diff guardrails, `.curt` session
-emission). Announces v0.1, in development.
+Product site for **wranglebot.com** — WrangleBot, a local supervisor for
+coding agents (loop breaking, AST diff guardrails, `.curt` session
+emission). v0.1.1 shipped, live on npm as `@wranglebot/cli`.
 
 ## Contents
 
@@ -10,21 +10,26 @@ emission). Announces v0.1, in development.
   build step. WrangleBot brand system (ink `#0E1116`, bone `#ECEFF4`, halt
   amber `#FFB224`), Space Grotesk display + JetBrains Mono, canonical
   interleaf-pattern header geometry + footer N logo.
+- `404.html` / `changelog.html` / `docs.html` / `license.html` — subpages
+  served at clean URLs (`/docs`, `/changelog`, `/license`).
 - `brand/` — canonical WrangleBot SVGs (mark, lockups, app icon) + lockup PNG.
 - `n-logo.png` — white N mark (footer house canon).
-- `n-mark.svg` — legacy N mark (unused, kept for reference).
 - `favicon.png` — 512px app icon (rasterized from `brand/` SVG).
 - `apple-touch-icon.png` — 180px, same source.
 - `og.png` — 1200×630 Open Graph card.
-- `_dev/` — `og-card.html` (OG source, re-render via headless Chrome) + QC
-  screenshots in `qc2/`. Not deployed.
+- `sitemap.xml` / `robots.txt` — bump `lastmod` in the sitemap when pages change.
 
 ## Deploy
 
-Cloudflare Pages, direct upload (project `wranglebot`, domain wranglebot.com):
+Automatic: `.github/workflows/deploy.yml` deploys `site/` to Cloudflare
+Pages on every push — `main` → wranglebot.com (production), any other
+branch → `<branch>.wranglebot.pages.dev` preview — and smoke-checks
+`/`, `/docs.html`, `/changelog.html`, `/license.html` after each deploy.
+
+Manual fallback (project `wranglebot`, domain wranglebot.com):
 
 ```
-npx wrangler pages deploy . --project-name wranglebot
+npx wrangler pages deploy site --project-name wranglebot
 ```
 
 © 2026 Jordan Newell
